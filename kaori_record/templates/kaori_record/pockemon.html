@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <style>
+    img.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+    div.small_letters {
+        text-align : right;
+    }
+
+    .poke_list {
+        height:50px;
+        filter: gray; /* IE6-9 */
+        filter: grayscale(1); /* Firefox 35+ */
+        -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+    }
+
+    .poke_list_width {
+        width:75px;
+        filter: gray; /* IE6-9 */
+        filter: grayscale(1); /* Firefox 35+ */
+        -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+    }
+
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>KAIST swimming team DB Web UI</title>
+
+    {% load staticfiles %}
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'kaori_record/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" >
+
+    <!-- Custom CSS -->
+    <link href="{% static 'kaori_record/css/sb-admin.css' %}" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="{% static 'kaori_record/css/plugins/morris.css' %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'kaori_record/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+
+     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+      
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+      
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'kaori_record/bower_components/metisMenu/dist/metisMenu.min.js' %}"></script>
+
+    <!-- jQuery -->
+    <script src="{% static 'kaori_record/js/jquery.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'kaori_record/js/bootstrap.min.js' %}"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="{% static 'kaori_record/js/plugins/morris/raphael.min.js' %}"></script>
+    <script src="{% static 'kaori_record/js/plugins/morris/morris.min.js' %}"></script>
+    <script src="{% static 'kaori_record/js/plugins/morris/morris-data.js' %}"></script>
+
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index">KAIST swimming team KAORI</a>
+            </div>
+           
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+
+                    <li class="active">
+                        <a href="pockemon"><i class="fa fa-fw fa-desktop"></i> 가오리 포켓몬 도감 </a>
+                    </li>
+
+                    <li>
+                        <a href="individual_record"><i class="fa fa-fw fa-table"></i> 개인 기록 검색 </a>
+                    </li>
+                    
+                    <li>
+                        <a href="ranking"><i class="fa fa-fw fa-bar-chart-o"></i> 종목별 순위 </a>
+                    </li>
+
+                    <li>
+                        <a href="competition"><i class="fa fa-fw fa-dashboard"></i> 참가 대회 및 수상 실적 </a>
+                    </li>
+
+                    <li>
+                        <a href="manage"><i class="fa fa-fw fa-edit"></i> 데이터 입력 및 수정 </a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">   
+
+                <br>
+
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <img class="left" src="{% static 'kaori_record/ziwoong.png' %}" width="75">
+                        </div>
+
+                        <div class="col-lg-11">
+                            <div class="panel panel-yellow">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">가오리 시티 체육관 관장 신지웅</h3>
+                                </div>
+
+                                <div class="panel-body">
+                                        포켓몬은 어째서 이렇게 노력해주는 걸까? 그 이유는 포켓몬을 향한 너의 신뢰와 애정을 느끼고 있기 때문이란다. 그 사실을 절대로 잊지 마렴!
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <div class="panel panel-red">
+
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"> 포켓몬 도감 확인하기 </h3>
+                                </div>
+
+                                <div class="panel-body">
+                                   <form method="POST" action="{% url 'pockemon_result' %}">
+
+                                        {% csrf_token %}
+
+                                        <div class="form-group">
+                                                        
+                                                        <label>이름 </label>
+                                                        <input class="form-control" id="name" name="name" >
+                                        </div>
+
+                                        <div class="form-group">
+                                                        <label>가오리 학번</label>
+                                                        <input class="form-control" id="year" name="year" >
+                                        </div>
+                                        <br>
+                                        <button type="submit" class="btn btn-default"> 확인 </button>
+                                        <br>
+
+
+                                    </form>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+
+                        <div class="col-lg-6">
+                            
+                                <img class="center" src="{% static 'kaori_record/obaksa2.png' %}" align="middle" style="max-width: 100%; height: auto;" >
+                        </div>
+                        
+                    </div>
+
+                    
+
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                        <div class="panel panel-green">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"> 획득 가능한 포켓몬 </h3>
+                                </div>
+                                <div class="panel-body">
+
+                                <div class="panel-body">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">일반 포켓몬</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_50_1.gif'%}" title="획득 조건 : 자유형 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_50_2.gif'%}" title="획득 조건 : 자유형 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_50_3.gif'%}" title="획득 조건 : 자유형 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_100_1.gif'%}" title="획득 조건 : 자유형 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_100_2.gif'%}" title="획득 조건 : 자유형 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_100_3.gif'%}" title="획득 조건 : 자유형 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_200_1.gif'%}" title="획득 조건 : 자유형 200m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_200_2.gif'%}" title="획득 조건 : 자유형 200m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_50_1.gif'%}" title="획득 조건 : 접영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_50_2.gif'%}" title="획득 조건 : 접영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_50_3.gif'%}" title="획득 조건 : 접영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_100_1.gif'%}" title="획득 조건 : 접영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_100_2.gif'%}" title="획득 조건 : 접영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_100_3.gif'%}" title="획득 조건 : 접영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_50_1.gif'%}" title="획득 조건 : 배영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_50_2.gif'%}" title="획득 조건 : 배영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_50_3.gif'%}" title="획득 조건 : 배영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_100_1.gif'%}" title="획득 조건 : 배영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_100_2.gif'%}" title="획득 조건 : 배영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_100_3.gif'%}" title="획득 조건 : 배영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_50_1.gif'%}" title="획득 조건 : 평영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_50_2.gif'%}" title="획득 조건 : 평영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_50_3.gif'%}" title="획득 조건 : 평영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_100_1.gif'%}" title="획득 조건 : 평영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_100_2.gif'%}" title="획득 조건 : 평영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_100_3.gif'%}" title="획득 조건 : 평영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_100_1.gif'%}" title="획득 조건 : 개인 혼영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_100_2.gif'%}" title="획득 조건 : 개인 혼영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_100_3.gif'%}" title="획득 조건 : 개인 혼영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_200_1.gif'%}" title="획득 조건 : 개인 혼영 200m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_200_2.gif'%}" title="획득 조건 : 개인 혼영 200m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_200_3.gif'%}" title="획득 조건 : 개인 혼영 200m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_50_1.gif'%}" title="획득 조건 : 바이핀 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_50_2.gif'%}" title="획득 조건 : 바이핀 50m">
+                                            <img class="poke_list_width" src="{% static 'kaori_record/pockemon/small_image/bifin_50_3.gif'%}" title="획득 조건 : 바이핀 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_100_1.gif'%}" title="획득 조건 : 바이핀 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_100_2.gif'%}" title="획득 조건 : 바이핀 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_100_3.gif'%}" title="획득 조건 : 바이핀 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_200_1.gif'%}" title="획득 조건 : 바이핀 200m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_200_2.gif'%}" title="획득 조건 : 바이핀 200m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/kick_50_1.gif'%}" title="획득 조건 : 발차기 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/kick_50_2.gif'%}" title="획득 조건 : 발차기 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/kick_50_3.gif'%}" title="획득 조건 : 발차기 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/dolphine_50_1.gif'%}" title="획득 조건 : 돌핀킥 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/dolphine_50_2.gif'%}" title="획득 조건 : 돌핀킥 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/dolphine_50_3.gif'%}" title="획득 조건 : 돌핀킥 50m">
+                                   
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">메가 진화 포켓몬</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="panel panel-info">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title" align="left"> "소문에 의하면 어떤 포켓몬들은 원래 알려졌던 것보다 한번 더 진화를 할 수 있다고 하더군요..." <br> </h3>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_50_4.gif'%}" title="획득 조건 : 자유형 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_100_4.gif'%}" title="획득 조건 : 자유형 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_200_3.gif'%}" title="획득 조건 : 자유형 200m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_50_4.gif'%}" title="획득 조건 : 접영 50m">
+                                            <img class="poke_list_width" src="{% static 'kaori_record/pockemon/small_image/fly_100_4.gif'%}" title="획득 조건 : 접영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_50_4.gif'%}" title="획득 조건 : 배영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_100_4.gif'%}" title="획득 조건 : 배영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_50_4.gif'%}" title="획득 조건 : 평영 50m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_100_4.gif'%}" title="획득 조건 : 평영 100m">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_200_3.gif'%}" title="획득 조건 : 바이핀 200m">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"> ☆ 귀여운 이브이 ☆</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="panel panel-warning">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title" align="left"> "어어허어헣어러어허 이브이짱 너무 커여워 ㅠㅠ " <br> </h3>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_50_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_100_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_200_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_50_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_100_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_50_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_100_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_50_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_100_r10.gif'%}" title="획득 조건 : ?">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">전설의 포켓몬</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseFour" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="panel panel-danger">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title" align="left"> "전설의 포켓몬은 이 세상에 딱 한 마리밖에 존재하지 않아요... 그들을 직접 본 사람은 아무도 없대요" <br> </h3>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_50_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list_width" src="{% static 'kaori_record/pockemon/small_image/free_100_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/free_200_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_50_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/fly_100_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_50_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/back_100_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_50_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/breast_100_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_100_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_200_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_100_r1.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_100_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/im_200_r10.gif'%}" title="획득 조건 : ?">
+                                            <img class="poke_list" src="{% static 'kaori_record/pockemon/small_image/bifin_100_r10.gif'%}" title="획득 조건 : ?">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+       
+                                </div>
+                            </div>
+                            
+
+                        </div>
+
+                    </div>
+                    
+
+                
+                <br><br>
+                <br><br>
+                <br><br>
+
+
+
+                
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="js/plugins/morris/raphael.min.js"></script>
+    <script src="js/plugins/morris/morris.min.js"></script>
+    <script src="js/plugins/morris/morris-data.js"></script>
+
+</body>
+
+</html>
